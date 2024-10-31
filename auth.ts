@@ -7,6 +7,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     logo: "/logo.png",
     buttonText: "#ffffff",
   },
+  trustHost: true,
   providers: [GitHub],
   callbacks: {
     authorized: async ({ auth }) => {
