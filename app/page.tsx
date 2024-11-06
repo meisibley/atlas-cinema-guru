@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import favoritedIcon from "../images/icons8-star-16.png";
 import favoriteIcon from "../images/icons8-star-em.png";
@@ -36,7 +35,7 @@ export default function HomePage() {
   const fetchTitles = async (page: number, minYear: number, maxYear: number, query = "", genres: string[]) => {
     try {
       setLoading(true);
-      const genreQuery = genres.join(",");
+      const genreQuery = genres.length > 0 ? genres.join(",") : "";
       const response = await fetch(
         `/api/titles?page=${page}&minYear=${minYear}&maxYear=${maxYear}&query=${query}&genres=${genreQuery}`
       );
@@ -131,11 +130,14 @@ export default function HomePage() {
   };
 
   const handleGenreToggle = (genre: string) => {
-    setSelectedGenres((prevGenres) =>
-      prevGenres.includes(genre)
+    setSelectedGenres((prevGenres) => {
+      if (prevGenres.length === genresList.length) {
+        return [genre];
+      }
+      return prevGenres.includes(genre)
         ? prevGenres.filter((g) => g !== genre)
         : [...prevGenres, genre]
-    );
+    });
   };
 
   // if (loading) return <div className="ml-20">Loading...</div>;
