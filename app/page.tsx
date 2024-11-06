@@ -33,8 +33,6 @@ export default function HomePage() {
   ];
   const [selectedGenres, setSelectedGenres] = useState<string[]>(genresList);
 
-  const pageSize = 10;
-
   const fetchTitles = async (page: number, minYear: number, maxYear: number, query = "", genres: string[]) => {
     try {
       setLoading(true);
@@ -46,8 +44,10 @@ export default function HomePage() {
         throw new Error("Failed to fetch titles.");
       }
       const data = await response.json();
-      setTitles(data.title.map((title: any) => ({ ...title })));
-      setHasMore(data.title.length > 0 && data.title.length === titles.length);
+      // setTitles(data.title.map((title: any) => ({ ...title })));
+      // setHasMore(data.title.length > 0 && data.title.length === titles.length);
+      setTitles(data.title);
+      setHasMore(data.title.length > 0);
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -138,7 +138,7 @@ export default function HomePage() {
     );
   };
 
-  if (loading) return <div className="ml-20">Loading...</div>;
+  // if (loading) return <div className="ml-20">Loading...</div>;
   if (error) return <div className="ml-20">Error: {error}</div>;
 
   return (
@@ -175,7 +175,7 @@ export default function HomePage() {
                 key={genre}
                 onClick={() => handleGenreToggle(genre)}
                 className={`bg-inherit rounded-full border-2 border-teal-300 px-2 w-full h-8 ${
-                  selectedGenres.includes(genre) ? "bg-teal-300 text-blue-900" : ""
+                  !selectedGenres.includes(genre) ? "bg-teal-300 text-blue-900" : ""
                 }`}
               >
                 {genre}
